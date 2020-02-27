@@ -3,11 +3,12 @@
 .global sub64S
 .global minU16
 .global minS32
+.global isLessThanU16
 /*
 
 //
 //
-//.global isLessThanU16
+//
 //.global isLessThanS16
 //.global shiftLeftU16
 //.global shiftS8
@@ -35,14 +36,20 @@ sub64S:
 
 minU16:
 	SUBS R2,R0,R1
-	MOVGT R0,R0   //condition Greater than (GT) Z clear, N=V (N and V set or N and V clear)
-	MOVLE R0,R1   //condition less than or equal (LE) Z set or N<>V (N set and V clear) or (N clear and V set)
+	MOVGT R0,R1   //condition Greater than (GT) Z clear, N=V (N and V set or N and V clear)
+	MOVLE R0,R0   //condition less than or equal (LE) Z set or N<>V (N set and V clear) or (N clear and V set)
 	BX LR
 minS32:
-	MOVGT R0,R0   //condition Greater than (GT) Z clear, N=V (N and V set or N and V clear)
-	MOVLE R0,R1   //condition less than or equal (LE) Z set or N<>V (N set and V clear) or (N clear and V set)
+	SUBS R2,R0,R1
+	MOVGT R0,R1   //condition Greater than (GT) Z clear, N=V (N and V set or N and V clear)
+	MOVLE R0,R0   //condition less than or equal (LE) Z set or N<>V (N set and V clear) or (N clear and V set)
 	BX LR
-	
+isLessThanU16:
+	SUBS R2,R0,R1
+	MOVLT R0,#1
+	MOVGT R0,#0
+	BX LR
+
 	
 
 
