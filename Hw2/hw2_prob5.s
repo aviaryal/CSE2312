@@ -4,12 +4,13 @@
 .global minU16
 .global minS32
 .global isLessThanU16
+.global isLessThanS16
 /*
 
 //
 //
 //
-//.global isLessThanS16
+//
 //.global shiftLeftU16
 //.global shiftS8
 //.global shiftU32
@@ -45,6 +46,7 @@ minS32:
 	MOVLE R0,R0   //condition less than or equal (LE) Z set or N<>V (N set and V clear) or (N clear and V set)
 	BX LR
 isLessThanU16:
+isLessThanS16:
 	SUBS R2,R0,R1
 	MOVLT R0,#1
 	MOVGT R0,#0
