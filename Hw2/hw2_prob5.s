@@ -37,12 +37,12 @@ sub64S:
 minU16:
 	SUBS R2,R0,R1
 	MOVGT R0,R1   //condition Greater than (GT) Z clear, N=V (N and V set or N and V clear)
-	MOVLE R0,R0   //condition less than or equal (LE) Z set or N<>V (N set and V clear) or (N clear and V set)
+	//MOVLE R0,R0   //condition less than or equal (LE) Z set or N<>V (N set and V clear) or (N clear and V set)
 	BX LR
 minS32:
 	SUBS R2,R0,R1
 	MOVGT R0,R1   //condition Greater than (GT) Z clear, N=V (N and V set or N and V clear)
-	MOVLE R0,R0   //condition less than or equal (LE) Z set or N<>V (N set and V clear) or (N clear and V set)
+	//MOVLE R0,R0   //condition less than or equal (LE) Z set or N<>V (N set and V clear) or (N clear and V set)
 	BX LR
 isLessThanU16:
 isLessThanS16:
