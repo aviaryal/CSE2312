@@ -8,14 +8,16 @@ extern uint16_t minU16(uint16_t x, uint16_t y); // returns the minimum of x, y
 extern int32_t minS32(int32_t x, int32_t y); // returns the minimum of x, y
 extern bool isLessThanU16(uint16_t x, uint16_t y); // returns 1 if x<y, 0 else
 extern bool isLessThanS16(int16_t x, int16_t y); // returns 1 if x<y, 0 else
-//extern uint16_t shiftLeftU16 (uint16_t x, uint16_t p); // returns x << p =((x*2^(p)) % 2 32 ) for p = 0..31
-//extern int8_t shiftS8(int8_t x, int8_t p); // return (x*2^p) % 2 32 ) for p = -31..31
-//extern uint32_t shiftU32(uint32_t x, int32_t p); // return ((x*2^p) % 2 32 ) for p = -31..31
-//extern bool isEqualU32(uint32_t x, uint32_t y); // returns 1 if x=y, 0 if x!=y
-//extern bool isEqualS8(int8_t x, int8_t y); // returns 1 if x=y, 0 if x!=y
+extern uint16_t shiftLeftU16 (uint16_t x, uint16_t p); // returns x << p =((x*2^(p)) % 2 32 ) for p = 0..31
+extern int8_t shiftS8(int8_t x, int8_t p); // return (x*2^p) % 2 32) for p = -31..31
+extern uint32_t shiftU32(uint32_t x, int32_t p); // return ((x*2^p) % 2 32 ) for p = -31..31
+extern bool isEqualU32(uint32_t x, uint32_t y); // returns 1 if x=y, 0 if x!=y
+extern bool isEqualS8(int8_t x, int8_t y); // returns 1 if x=y, 0 if x!=y
 //extern bool isStrEqual(const char* str1, const char* str2); // returns 1 the strings match, 0 otherwise
 //extern void strCopy(char* strTo, const char* strFrom); // copies strFrom to strTo
 
+
+extern bool isEqualS32(uint32_t x, int32_t y); // returns 1 if x=y, 0 if x!=y
 //disassemble
 
 int main()
@@ -26,7 +28,7 @@ int main()
   uint64_t c;
   c=add32(a,b);
   printf("THIS IS ADD32 RETURN 64 bit %llu \n",c);
-  
+  */
   /*
   uint64_t a=6294967299;
   uint64_t b=1;
@@ -65,7 +67,7 @@ int main()
   
   */
   /*
-  int16_t a=-200;
+  int16_t a=-32678;
   int16_t b=-125;
   if(isLessThanS16(a,b))
   {
@@ -77,10 +79,56 @@ int main()
 		
 	}
   */
+  /*
+  uint16_t a=16;
+  uint16_t b=2;
+  uint16_t c=shiftLeftU16(a,b);
+  printf("%hu is 16 bit <<  by %hu = %hu \n",a,b,c); 
+  */
+ 
+ 
+  /*
+  //extern int8_t shiftS8(int8_t x, int8_t p); 
+  int8_t a=-32;
+  int8_t b=1;
+  int8_t c= shiftS8(a,b);
+  printf("%hd shifted by %hd = %hd \n",a,b,c);
+  */
   
   
+  //extern uint32_t shiftU32(uint32_t x, int32_t p);
+  uint32_t a=2;
+  int32_t b=30;
+  uint32_t c= shiftS8(a,b);
+  printf("%d shifted by %d = %lu \n",a,b,c);
   
   
+  /*
+  uint32_t a=2;
+  uint32_t b=3;
+  if(isEqualU32(a,b))
+  {
+  	printf("%d is equal %d \n",a,b);
+  }
+  else
+  {
+		printf("%d is not equal %d \n",a,b);
+		
+	}
+  */
+  /*
+  uint32_t a=127;
+  int32_t b=-1;
+  if(isEqualS32(a,b))
+  {
+  	printf("%d is equal %d \n",a,b);
+  }
+  else
+  {
+		printf("%d is not equal %d \n",a,b);
+		
+	}
+  */
    
   
 }

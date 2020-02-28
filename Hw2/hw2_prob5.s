@@ -6,15 +6,18 @@
 .global isLessThanU16
 .global isLessThanS16
 .global shiftLeftU16
+.global isEqualU32
+.global isEqualS8
+.global shiftU32
 .global shiftS8
 /*
 
-.global shiftU32
-.global isEqualU32
-.global isEqualS8
+
 .global isStrEqual
 .global strCopy
 */
+
+
 
 //disassemble
 
@@ -50,16 +53,32 @@ isLessThanS16:
 shiftLeftU16:
 	MOV R0,R0,LSL R1
 	BX LR
-shiftS8:
-	CMP R1,#0
-	
-	MOVNE R0,R0,LSL R1
-	LDR R2,=#0xffffffff
-	EOR R1,R1,R2
-	ADD R1,R1,#1
-	MOV R0,R0,LSR R1
-	
+isEqualU32:
+isEqualS8:
+	TEQ R1,R0
+	MOVEQ R0,#1
+	MOVNE R0,#0
 	BX LR
+
+	
+shiftS8:
+	SUBS R1,R1,#0
+	MOVPL R0,R0,ASL R1
+	LDRMI R2,=#0xffffffff
+	EORMI R1,R1,R2
+	ADDMI R1,R1,#1
+	MOVMI R0,R0,ASR R1	
+	BX LR
+shiftU32:
+	SUBS R1,R1,#0
+	MOVPL R0,R0,LSL R1
+	LDRMI R2,=#0xffffffff
+	EORMI R1,R1,R2
+	ADDMI R1,R1,#1
+	MOVMI R0,R0,LSR R1	
+	BX LR
+
+
 
 	
 
