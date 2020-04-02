@@ -1,4 +1,11 @@
 .global isStrEqual
+.global strCopy
+.global sumS16
+.global sumU16
+.global countZeros
+.global rightStringFull
+.global rightStringTrunc
+.global countMatches
 .text
 
 isStrEqual:
@@ -13,12 +20,14 @@ length_st1:
 	ADDNE R5,R5,#1
 	BNE length_st1
 	SUB R1,R1,R5
+	SUB R1,R1,#1
 length_st2:
 	LDRSB R4,[R2],#1 
 	CMP R4,#0
 	ADDNE R6,R6,#1
 	BNE length_st2
 	SUB R2,R2,R6
+	SUB R2,R2,#1
 	CMP R5,R6
 	BNE not_equal
 isStrEqual_loop:
@@ -35,5 +44,118 @@ not_equal:
 end:
 	POP {R4,R5,R6}
 	BX LR
+	
+	
+	
+strCopy:
+	LDRB R2,[R1],#1
+	STRB R2,[R0],#1
+	CMP R2,#0
+	BNE strCopy
+	BX LR
+	
+	
+sumS16:
+	MOV R2,R0
+	MOV R0,#0
+	CMN R1,#0
+	NEGMI R1,R1
+sumS_loop:
+	LDRSH R3,[R2],#2
+	ADD R0,R0,R3
+	SUBS R1,R1,#1
+	BNE sumS_loop
+	BX LR 	
+	
+	
+sumU16:
+	MOV R2,R0
+	MOV R0,#0
+sumU_loop:
+	LDRH R3,[R2],#2
+	ADD R0,R0,R3
+	SUBS R1,R1,#1
+	BNE sumU_loop
+	BX LR 	
+	
+countZeros:
+	MOV R2,R0
+	MOV R0,#0
+count_zero_loop:
+	LDR R3,[R2],#4
+	CMP R3,#0
+	ADDEQ R0,R0,#1
+	SUBS R1,R1,#1
+	BNE count_zero_loop
+	BX LR 	
+	
+	
+rightStringFull:
+	//MOV R0,#0
+	PUSH {R4}
+	MOV R4,#0
+	CMP R2,#0
+	MOVEQ R0,#0
+	BEQ end_rightStringFuLL
+find_length:
+	LDRSB R3,[R1],#1
+	CMP R3,#0
+	ADDNE R4,R4,#1
+	BNE find_length
+	CMP R4,R2
+	MOVMI R0,#0
+	BMI end_rightStringFuLL
+	SUB R1,R1,R2
+	SUB R1,R1,#1
+copy_right_string:
+	LDRSB R3,[R1],#1
+	STRB R3,[R0],#1
+	SUBS R2,R2,#1
+	BNE copy_right_string
+end_rightStringFuLL:
+	POP {R4}
+	BX LR
+	
+	
+	
+rightStringTrunc:
+	PUSH {R4}
+	MOV R4,#0
+	CMP R2,#0
+	MOVEQ R0,#0
+	BEQ end_turnc
+find_length_Trunc:
+	LDRSB R3,[R1],#1
+	CMP R3,#0
+	ADDNE R4,R4,#1
+	BNE find_length_Trunc
+	CMP R4,R2
+	BMI Trunc_all_string
+	SUB R1,R1,R2
+	SUB R1,R1,#1
+	B copy_right_string_turnc
+Trunc_all_string:
+	SUB R1,R1,#1
+	SUB R1,R1,R4
+	B end_turnc
+copy_right_string_turnc:
+	LDRSB R3,[R1],#1
+	STRB R3,[R0],#1
+	SUBS R2,R2,#1
+	BNE copy_right_string
+end_turnc:
+	POP {R4}
+	BX LR
+	
+	
+	
+	
+countMatches:
+	LDRSB R2,[R0]
+	
+
+
+	
+	
 	
 	
