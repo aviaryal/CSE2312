@@ -14,7 +14,7 @@ extern int32_t find2ndMatch(const char strIn[], const char strMatch[]) ;
 extern uint32_t countMatches(const char strIn[], const char strMatch[]);
 extern void sortAscendingInPlace (uint32_t x[], uint32_t count);
 extern	uint8_t decimalToUint8(const char str[]);
-//extern int8_t decimalToInt8(const char str[]) 
+extern int8_t decimalToInt8(const char str[]) ;
 //extern uint16_t hexStringToUint16(const char str[]) 
 //extern void uint8ToBinaryString (char str[], uint8_t x) 
 //int32_t findStreet (char street[], const BUSINESS3 business[], uint32_t count) 
@@ -80,9 +80,16 @@ int main()
   uint32_t x=countMatches(a,b);
   printf("There are %u %s on %s\n",x,a,b);
   */
+  /*
   char *a={"BABAB AB b"};
   char *b={"AB"};
   int32_t x=find2ndMatch(a,b);
   //find2ndMatch(a,b);
   printf("The %s is offset %s\n",a,x);
+  */
+  /*
+  char *a={"0"};
+  int8_t x= decimalToInt8(a);
+  printf("The value is %d\n",x);
+  */
 }
