@@ -9,10 +9,11 @@ extern uint32_t sumU16(const uint16_t x[], uint32_t count);
 extern uint32_t countZeros(const int32_t x[], uint32_t count);
 extern void rightStringFull(char strOut[], const char strIn[], uint32_t length); 
 extern void rightStringTrunc(char strOut[], const char strIn[], uint32_t length);
-//extern int32_t find2ndMatch(const char strIn[], const char strMatch[]) ;
+extern int32_t find2ndMatch(const char strIn[], const char strMatch[]) ;
+//extern void find2ndMatch(const char strIn[], const char strMatch[]) ;
 extern uint32_t countMatches(const char strIn[], const char strMatch[]);
 extern void sortAscendingInPlace (uint32_t x[], uint32_t count);
-//extern	uint8_t decimalToUint8(const char str[]);
+extern	uint8_t decimalToUint8(const char str[]);
 //extern int8_t decimalToInt8(const char str[]) 
 //extern uint16_t hexStringToUint16(const char str[]) 
 //extern void uint8ToBinaryString (char str[], uint8_t x) 
@@ -73,9 +74,15 @@ int main()
   for(int i=0;i<3;i++)
   	printf("%d ",x[i]);
   */
-  
+  /*
   char *a={"BABAB AB b"};
   char *b={"AB b"};
   uint32_t x=countMatches(a,b);
   printf("There are %u %s on %s\n",x,a,b);
+  */
+  char *a={"BABAB AB b"};
+  char *b={"AB"};
+  int32_t x=find2ndMatch(a,b);
+  //find2ndMatch(a,b);
+  printf("The %s is offset %s\n",a,x);
 }

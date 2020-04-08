@@ -7,9 +7,10 @@
 .global rightStringTrunc
 .global sortAscendingInPlace
 .global countMatches
+.global find2ndMatch
 //.global decimalToUint8
 //.global countMatches
-//.global find2ndMatch
+
 //.global decimalToInt8
 //.global hexStringToUint16
 //.global uint8ToBinaryString
@@ -184,6 +185,8 @@ ascending_sort_end:
     BX LR         
 	
 	
+
+	
 countMatches:
 	MOV R2,R0
 	MOV R0,#0
@@ -220,12 +223,57 @@ check_inner:
 	MOVNE R3,#0
 	BEQ load_second
 	B load_match_check
-	
 end_match:
 	POP {R4,R5,R6,R7}
 	BX LR
 
 
+
+
+
+find2ndMatch:
+	//MOV R2,R0
+	MOV R2,#0
+	PUSH {R4,R5,R6,R7}
+	MOV R6,#0
+	MOV R3,#0
+load_2match_check:
+	LDRB R4,[R1,R3]
+	CMP R4,#0
+	ADDEQ R2,R2,#1
+	CMP R2,#2
+	ADDEQ R0,R0,R3
+	ADDEQ R0,R0,#1
+	BEQ end_2match
+	MOV R3,#0
+	BEQ load_2match_check
+check_2match:
+	LDRB R5,[R0,R6]
+	CMP R5,#0
+	BEQ end_2match
+	ADD R6,R6,#1
+	CMPNE R5,R4
+	MOVNE R3,#0
+	BNE load_2match_check
+	MOVEQ R7,R6
+	ADD R3,R3, #1
+load_2second:
+	LDRB R4,[R1,R3]
+	CMP R4,#0
+	BEQ load_2match_check
+check_2inner:
+	LDRB R5,[R0,R7]
+	CMP R5,#0
+	BEQ check_2match
+	ADD R7,R7,#1
+	CMP R5,R4
+	ADDEQ R3,R3,#1
+	MOVNE R3,#0
+	BEQ load_2second
+	B load_2match_check
+end_2match:
+	POP {R4,R5,R6,R7}
+	BX LR
 	
 	
 	
