@@ -2,6 +2,21 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
+
+
+
+typedef struct _BUSINESS
+{
+ uint32_t taxId;
+ char name[22];
+ char street[30];
+ char direction;
+ uint32_t addNo;
+ char city[35];
+ char state[3];
+ uint32_t zip;
+} BUSINESS;
+
 extern bool isStrEqual(const char *str1, const char *str2);
 extern void strCopy(char *str1, const char *str2);
 extern int32_t sumS16(const int16_t x[], int32_t count);
@@ -15,11 +30,15 @@ extern uint32_t countMatches(const char strIn[], const char strMatch[]);
 extern void sortAscendingInPlace (uint32_t x[], uint32_t count);
 extern	uint8_t decimalToUint8(const char str[]);
 extern int8_t decimalToInt8(const char str[]) ;
-//extern uint16_t hexStringToUint16(const char str[]) 
-//extern void uint8ToBinaryString (char str[], uint8_t x) 
-//int32_t findStreet (char street[], const BUSINESS3 business[], uint32_t count) 
+extern uint16_t hexStringToUint16(const char str[]) ;
+extern void uint8ToBinaryString (char str[], uint8_t x) ;
+int32_t findStreet (char street[], const BUSINESS business[], uint32_t count) ;
 
 //disassemble
+
+
+
+#define COUNT 3
 
 int main()
 {
@@ -92,4 +111,36 @@ int main()
   int8_t x= decimalToInt8(a);
   printf("The value is %d\n",x);
   */
+  
+  /*
+  char a[9];;
+  uint8_t x= 255;
+  uint8ToBinaryString(a,x);
+  printf("The value is %d in binary is  %s\n",x,a);
+  */
+  /*
+  char *a={"F9FF"};
+  uint16_t b = hexStringToUint16(a);
+  printf("Converting a %s to b in hex : %X\n",a,b);
+  */
+  
+
+  uint32_t i=3;
+  BUSINESS business[COUNT] = {
+        {12342332, "Home Depot", "AB", 'W', 201, "Arlington", "TX", 76011},
+        {18091123, "Kroger", "Lamar", 'W', 945, "Arlington", "TX", 76012},
+        {81927322, "Round1", "Cooper St" , 'S', 3811, "Arlington", "TX", 76015} };
+    
+    printf("Addresses of selected record entries:\r\n");
+    char format[] = {"%p %s\r\n"};
+    printf(format, &business[0], "business[0]");
+    printf(format, &business[1], "business[1]");
+    printf(format, &business[2], "business[2]");
+    
+    
+    
+    
+    char *street={"Lamar"};
+    uint32_t VALUE= findStreet(street,business,i);
+    printf("%p\n",VALUE);
 }

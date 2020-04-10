@@ -1,0 +1,20 @@
+.global getName
+.global getZip
+
+.text
+
+/* R0 = &business[0].taxId, R1 = index -> R0 = char* to name */
+getName:
+    ADD R0, R0, #4 /* adjust pointer to business[0].name */
+    MOV R2, #115 /* R2 = sizeof(business) with packed */
+    MUL R3, R1, R2 /* R3 = offset to business[index] record */
+    ADD R0, R0, R3 /* adjust pointer to business[index].name */
+    BX LR
+
+/* R0 = &business[0].taxId, R1 = index -> R0 = zip code */
+getZip:
+    ADD R0, R0, #111 /* adjust pointer to business[0].zipCode */
+    MOV R2, #115 /* R2 = sizeof(business) with packed */
+    MUL R3, R1, R2 /* R3 = offset to business[index] record */
+    LDR R0, [R0, R3] /* R0 = zip code */
+    BX LR

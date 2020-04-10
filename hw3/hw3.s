@@ -9,11 +9,10 @@
 .global countMatches
 .global find2ndMatch
 .global decimalToUint8
-
 .global decimalToInt8
-//.global hexStringToUint16
-//.global uint8ToBinaryString
-//.global findStreet
+.global hexStringToUint16
+.global uint8ToBinaryString
+.global findStreet
 .text
 
 isStrEqual:
@@ -440,11 +439,211 @@ three_ni_decimal:
 	MUL R3,R3,R7
 	ADD R0,R0,R3
 check_ni:
-	
 	CMP R0,#128
 	MOVGT R0,#0
 	NEG R0,R0
 decimal_si_end:
 	POP {R4,R5,R6}
 	BX LR
+	
+	
+
+uint8ToBinaryString:
+	MOV R2,#0x80
+utb_loop:
+	TST R1,R2
+	MOVNE R3,#49
+	MOVEQ R3,#48
+	STRB R3,[R0],#1
+	MOVS R2,R2,LSR #1
+	BNE utb_loop
+	MOV R3,#0
+	STRB R3,[R0]
+	BX LR
+
+
+
+
+/*
+hexStringToUint16:
+	PUSH {R4,R5,R6,R7,R8}
+	MOV R1,R0
+	MOV R0,#0
+	MOV R2,#3
+	MOV R4,#3
+	MOV R8,#0
+find_size_hex:
+	LDRSB R3,[R1],#1 
+	CMP R3,#0
+	ADDNE R8,R8,#1
+	BNE find_size_hex
+	SUB R1,R1,R8
+	SUB R1,R1,#1
+	CMP R8,#4
+	BGT hex_end
+load_hex:
+	CMP R2,#0
+	BLT hex_end
+	LDRB R3,[R1,R2]
+	CMP R3,#0
+	SUB R2,R2,#1
+	BEQ load_hex
+	CMP R3,#48
+	MOVLT R0,#0
+	BLT hex_end
+	CMP R3,#57
+	MOVGT R0,#0
+	BGT hex_end
+one_hex:
+	 CMP R4,#4
+	 BNE two_hex
+	 SUB R4,R4,#1
+	 SUB R3,R3,#48
+	 ADDEQ R0,R0,R3
+	 
+	 B load_hex
+two_hex:
+	CMP R4,#3
+	BNE three_hex
+	SUB R4,R4,#1
+	SUB R3,R3,#48
+	MUL R3,R3,R6
+	ADD R0,R0,R3
+	B load_hex
+three_hex:
+	CMP R4,#2
+	BNE four_hex
+	SUB R3,R3,#48
+	SUB R4,R4,#1
+	MUL R3,R3,R7
+	ADD R0,R0,R3
+	B load_hex
+four_hex:
+	
+	
+check:
+	CMP R0,#255
+	MOVGT R0,#0
+hex_end:
+	POP {R4,R5,R6}
+	BX LR
+
+*/	
+
+hexStringToUint16:
+	PUSH {R4,R5,R6,R7,R8}
+	MOV R1,R0
+	MOV R0,#0
+	MOV R2,#3
+	MOV R4,#3
+	MOV R8,#0 
+	MOV R7,#2  	//to_find_length
+find_size_hex:
+	LDRSB R3,[R1],#1 
+	CMP R3,#0
+	ADDNE R8,R8,#1
+	BNE find_size_hex
+	SUB R1,R1,R8
+	SUB R1,R1,#1
+	CMP R8,#4
+	BGT hex_end
+load_hex:
+	CMP R2,#0
+	BLT hex_end
+	LDRB R3,[R1,R2]
+	CMP R3,#0                   //check null
+	SUB R2,R2,#1
+	BEQ load_hex
+	CMP R3,#48             			//compare with zero
+	MOVLT R0,#0									//IF LESS THAN ZERO STORE ZERO IN THE REGISTER
+	BLT hex_end									//If less than zero end
+	CMP R3,#57
+	CMPGT R3,#65								//If greater than nine then compare with A 
+	CMPGT R3,#70								//If greater than A compare with 'F'
+	BGT hex_end									//If greater than F end
+	CMP R3,#57									//compare with nine
+	BLE	deci_hex								//if less than and equal branch
+	SUB R3,R3,#55
+	B one_hex
+deci_hex:
+	SUB R3,R3,#48
+one_hex:
+	 CMP R4,#3
+	 BNE two_hex
+	 SUB R4,R4,#1
+	 ADD R0,R0,R3
+	 B load_hex
+two_hex:
+	 CMP R4,#2
+	 BNE three_hex
+	 SUB R4,R4,#1
+	 MOV R5,#16
+	 MUL R6,R5,R3
+	 ADD R0,R0,R6
+	 B load_hex
+three_hex:
+	CMP R4,#1
+	BNE four_hex
+	SUB R4,R4,#1
+	MOV R5,#256
+	MUL R6,R5,R3
+	ADD R0,R0,R6
+	B load_hex
+four_hex:
+	CMP R4,#0
+	SUB R4,R4,#1
+	MOV R5,#4096
+	MUL R6,R5,R3
+	MUL R6,R5,R3
+	ADD R0,R0,R6
+	B load_hex
+	
+hex_end:
+	POP {R4,R5,R6}
+	BX LR
+	
+
+
+	
+findStreet:
+	MOV R3,R0 
+	PUSH {R4,R5,R6,R7,R8,R9}
+	MOV R4,#108
+	MOV R5,#0  //COUNTER FOR THE INDEX
+	MOV R0,#-1
+find_street:
+	CMP R5,R2
+	MOVGT R0,#-1
+	BGT find_street_end
+	MUL R7,R5,R4    //GET ADDRESS
+	ADD R7,R7,#26
+	ADD R5,R5,#1 		//ADD 1 TO THE ARRAY INDEX
+	MOV R6,#0				//COUNTER FOR STREET ADDRESS 
+match_check:
+	LDRB R8,[R1,R7]  //
+	LDRB R9,[R3,R6]
+	ADD R6,R6,#1
+	ADD R7,R7,#1
+	CMP R8,#0
+	CMPEQ R8,R9
+	BEQ equal_string
+	CMP R9,#0
+	CMPEQ R9,R8
+	BEQ equal_string
+	CMP R9,R8
+	BEQ match_check
+	//ADD R1,R1,
+	BNE find_street
+equal_string:
+	SUBS R5,R5,#1
+	MUL R7,R5,R4
+	MOV R5,R1
+	ADD R5,R5,R7
+	MOV R0,R5
+find_street_end:
+	POP {R4,R5,R6,R7,R8,R9}
+	BX LR
+	
+	
+	
 	
