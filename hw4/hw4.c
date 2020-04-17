@@ -27,25 +27,25 @@ int main()
 	double y=prodF32_64(x,s);
 	printf("%lf",y);
 	*/
-	
+	/*
 	uint32_t s=3;
 	float x[3]={1,2,3};
-	float y[3]={1,2,3};
+	float y[3]={1,-2,3};
 	float z=dotpF32(x,y,s);
 	printf("%f\n",z);
+	*/
 	
-	/*
-	uint32_t s=4;
-	double x[4]={4,8,2,5};
+	uint32_t s=2;
+	double x[2]={2,5};
 	double y=minF64(x,s);
 	printf("%lf",y);
-	*/
+	
 	/*
 	double a[COUNT] = {1.01, 2.02, 3.03};
   double mean;
   mean = meanF64(a, COUNT);
   printf("mean = %lf\n", mean);
-  */
+ 	*/
 }
 
 

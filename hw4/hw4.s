@@ -52,20 +52,20 @@ prodF32_64_end:
 
 dotpF32:
 	MOV R3,#0
-	VMOV S4,R3
+	VMOV S0,R3
 dotpF32_loop:
 	CMP R2,#0
 	BEQ dotpF32_end
-	VLDR S0,[R0]
+	VLDR S4,[R0]
 	VLDR S1,[R1]
 	ADD R0,R0,#4
 	ADD R1,R1,#4
-	VMUL.F32 S3,S0,S1
-	VADD.F32 S4,S4,S3
+	VMUL.F32 S3,S4,S1
+	VADD.F32 S0,S0,S3
 	SUB R2,R2,#1
 	B dotpF32_loop
 dotpF32_end:
-	VMOV R0,S4
+	VMOV R0,S0
 	BX LR
 	
 	
@@ -82,6 +82,7 @@ find_min_loop:
 	VLDR D1,[R0]
 	ADD R0,R0,#8
 	VCMP.F64 D0,D1
+	
 	VMOVGT.F64 D0,D1
 	SUB R1,R1,#1
 	B find_min_loop
@@ -92,11 +93,7 @@ minF64_end:
 	
 
 	
-	
-	
-	
-	
-	
+
 	
 	
 	
