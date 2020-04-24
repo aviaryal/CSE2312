@@ -8,7 +8,7 @@ extern double meanF64(double x[], uint32_t count);
 
 int main()
 {
-    double a[COUNT] = {1.01, 2.02, 3.03};
+    double a[COUNT] = {1.01, 2.0, 3.03};
     double mean;
     mean = meanF64(a, COUNT);
     printf("mean = %lf\n", mean);

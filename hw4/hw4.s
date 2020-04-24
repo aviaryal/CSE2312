@@ -3,6 +3,7 @@
 .global dotpF32
 .global minF64
 
+
 .text
 
 
@@ -26,18 +27,21 @@ diff32_end:
 	POP {R4}
 	BX LR
 	
-/*
+
 	
 prodF32_64:
 	CMP R1,#0
 	MOVEQ R0,#0 
+	MOV R2,#1
+	VMOV S0,R2
+	VCVT.F64.U32 D0,S0                //Converting same register don't use F32
 	BEQ prodF32_64_end
 prodF32_64_loop:
 	CMP R1,#0
 	BEQ prodF32_64_end
 	VLDR S4,[R0]
 	ADD R0,R0,#4
-	VCVT.F64.s32 D1,S4
+	VCVT.F64.F32 D1,S4             //Converting different register can use F32
 	VMUL.F64 D4,D1,D0
 	VMOV.F64 D0,D4
 	SUB R1,R1,#1
@@ -46,7 +50,7 @@ prodF32_64_loop:
 prodF32_64_end:
 	VMOV R0,R1,D0
 	BX LR
-*/
+
 
 
 
@@ -81,10 +85,15 @@ find_min_loop:
 	BEQ minF64_end
 	VLDR D1,[R0]
 	ADD R0,R0,#8
-	VCMP.F64 D0,D1
-	
-	VMOVGT.F64 D0,D1
+	//VCMP.F64 D0,D1
+	VSUB.F64 D2,D0,D1
+	VMOV R2,S5
+	CMP R2,#0
 	SUB R1,R1,#1
+	BPL positive
+	B find_min_loop
+positive:
+	VMOV.F64 D0,D1
 	B find_min_loop
 minF64_end:
 	VMOV R0,R1,D0
@@ -92,10 +101,7 @@ minF64_end:
 	
 	
 
-	
 
-	
-	
 	
 	
 	
