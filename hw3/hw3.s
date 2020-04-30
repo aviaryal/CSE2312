@@ -277,174 +277,44 @@ end_2match:
 	
 	
 decimalToUint8:
-	PUSH {R4,R5,R6,R7,R8}
+	PUSH {R4,R5,R6,R7,R8,R9}
 	MOV R1,R0
+	MOV R2,#0
 	MOV R0,#0
-	MOV R2,#2
-	MOV R6,#10
-	MOV R7,#100
-	MOV R4,#2
-	MOV R8,#0
-find_size:
-	LDRSB R3,[R1],#1 
-	CMP R3,#0
-	ADDNE R8,R8,#1
-	BNE find_size
-	SUB R1,R1,R8
-	SUB R1,R1,#1
-	CMP R8,#3
-	BGT decimal_end
-load_dec:
-	CMP R2,#0
-	BLT decimal_end
+	MOV R4,#10
+	MOV R6,#1
+	MOV R7,#0
+find_length_u8:
 	LDRB R3,[R1,R2]
 	CMP R3,#0
+	ADDNE R2,R2,#1
+	BNE find_length_u8
 	SUB R2,R2,#1
-	BEQ load_dec
-	CMP R3,#48
-	MOVLT R0,#0
-	BLT decimal_end
-	CMP R3,#57
-	MOVGT R0,#0
-	BGT decimal_end
-one_decimal:
-	 CMP R4,#2
-	 BNE two_decimal
-	 SUB R4,R4,#1
-	 SUB R3,R3,#48
-	 ADD R0,R0,R3
-	 B load_dec
-two_decimal:
-	CMP R4,#1
-	BNE three_decimal
-	SUB R4,R4,#1
+	MOV R5,R2
+	MOV R8,R2
+get_multiplicity:
+	CMP R2,#0
+	BLT decimal_u8_end
+	CMP R5,R2
+	MULNE R9,R6,R4
+	MOVNE R6,R9
+	SUBNE R5,R5,#1
+	BNE get_multiplicity
+	LDRB R3,[R1,R2]
 	SUB R3,R3,#48
-	MUL R3,R3,R6
-	ADD R0,R0,R3
-	B load_dec
-three_decimal:
-	CMP R4,#0
-	SUB R3,R3,#48
-	SUB R4,R4,#1
-	MUL R3,R3,R7
-	ADD R0,R0,R3
-check:
+	MUL R7,R6,R3
+	ADD R0,R0,R7
+	SUB R2,R2,#1
+	MOV R5,R8
+	MOV R6,#1
+	B get_multiplicity
+decimal_u8_end:
+	POP {R4,R5,R6,R7,R8,R9}
 	CMP R0,#255
 	MOVGT R0,#0
-decimal_end:
-	POP {R4,R5,R6}
 	BX LR
 	
-	
-	
-	
-	
-decimalToInt8:
-	PUSH {R4,R5,R6,R7,R8}
-	MOV R1,R0
-	MOV R0,#0
-	MOV R2,#2
-	MOV R6,#10
-	MOV R7,#100
-	MOV R4,#2
-	MOV R8,#0
-find_si_size:
-	LDRSB R3,[R1],#1 
-	CMP R3,#0
-	ADDNE R8,R8,#1
-	BNE find_si_size
-	SUB R1,R1,R8
-	SUB R1,R1,#1
-	CMP R8,#4
-	BGT decimal_si_end
-find_sign:
-	LDRB R3,[R1]
-	CMP R3, #45
-	MOVEQ R2,#3
-	MOVEQ R4,#3
-	BEQ load_ni_dec
-	BNE decimal_si_end
-load_pi_dec:
-	CMP R8,#4
-	BEQ decimal_si_end
-	CMP R2,#0
-	BLT decimal_si_end
-	LDRB R3,[R1,R2]
-	CMP R3,#0
-	SUB R2,R2,#1
-	BEQ load_pi_dec
-	CMP R3,#48
-	MOVLT R0,#0
-	BLT decimal_si_end
-	CMP R3,#57
-	MOVGT R0,#0
-	BGT decimal_si_end
-one_pi_decimal:
-	 CMP R4,#2
-	 BNE two_pi_decimal
-	 SUB R4,R4,#1
-	 SUB R3,R3,#48
-	 ADD R0,R0,R3
-	 B load_pi_dec
-two_pi_decimal:
-	CMP R4,#1
-	BNE three_pi_decimal
-	SUB R4,R4,#1
-	SUB R3,R3,#48
-	MUL R3,R3,R6
-	ADD R0,R0,R3
-	B load_pi_dec
-three_pi_decimal:
-	CMP R4,#0
-	SUB R3,R3,#48
-	SUB R4,R4,#1
-	MUL R3,R3,R7
-	ADD R0,R0,R3
-check_pi:
-	CMP R0,#127
-	MOVGT R0,#0
-	B decimal_si_end
-load_ni_dec:
-	CMP R2,#1
-	BLT check_ni
-	LDRB R3,[R1,R2]
-	CMP R3,#0
-	SUB R2,R2,#1
-	BEQ load_ni_dec
-	CMP R3,#48
-	MOVLT R0,#0
-	BLT decimal_si_end
-	CMP R3,#57
-	MOVGT R0,#0
-	BGT decimal_si_end
-one_ni_decimal:
-	 CMP R4,#3
-	 BNE two_ni_decimal
-	 SUB R4,R4,#1
-	 SUB R3,R3,#48
-	 ADD R0,R0,R3
-	 B load_ni_dec
-two_ni_decimal:
-	CMP R4,#2
-	BNE three_ni_decimal
-	SUB R4,R4,#1
-	SUB R3,R3,#48
-	MUL R3,R3,R6
-	ADD R0,R0,R3
-	B load_ni_dec
-three_ni_decimal:
-	CMP R4,#1
-	SUB R3,R3,#48
-	SUB R4,R4,#1
-	MUL R3,R3,R7
-	ADD R0,R0,R3
-check_ni:
-	CMP R0,#128
-	MOVGT R0,#0
-	NEG R0,R0
-decimal_si_end:
-	POP {R4,R5,R6}
-	BX LR
+
 	
 	
 

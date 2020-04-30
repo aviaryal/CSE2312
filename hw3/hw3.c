@@ -106,11 +106,11 @@ int main()
   //find2ndMatch(a,b);
   printf("The %s is offset %s\n",a,x);
   */
-  /*
-  char *a={"0"};
-  int8_t x= decimalToInt8(a);
-  printf("The value is %d\n",x);
-  */
+  
+  char *a={"1000"};
+  uint8_t x= decimalToUint8(a);
+  printf("The value is %u\n",x);
+  
   
   /*
   char a[9];;
@@ -124,7 +124,7 @@ int main()
   printf("Converting a %s to b in hex : %X\n",a,b);
   */
   
-
+	/*
   uint32_t i=3;
   BUSINESS business[COUNT] = {
         {12342332, "Home Depot", "AB", 'W', 201, "Arlington", "TX", 76011},
@@ -143,4 +143,5 @@ int main()
     char *street={"Lamar"};
     uint32_t VALUE= findStreet(street,business,i);
     printf("%p\n",VALUE);
+   */
 }
