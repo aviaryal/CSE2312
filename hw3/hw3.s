@@ -51,7 +51,7 @@ not_equal:
 end:
 	POP {R4,R5,R6}
 	BX LR
-	
+//....................................................................	
 	
 	
 strCopy:
@@ -60,7 +60,7 @@ strCopy:
 	CMP R2,#0
 	BNE strCopy
 	BX LR
-	
+//..................................................................	
 	
 sumS16:
 	MOV R2,R0
@@ -73,7 +73,7 @@ sumS_loop:
 	SUBS R1,R1,#1
 	BNE sumS_loop
 	BX LR 	
-	
+//.................................................................
 	
 sumU16:
 	MOV R2,R0
@@ -84,7 +84,8 @@ sumU_loop:
 	SUBS R1,R1,#1
 	BNE sumU_loop
 	BX LR 	
-	
+//................................................................	
+
 countZeros:
 	MOV R2,R0
 	MOV R0,#0
@@ -95,7 +96,7 @@ count_zero_loop:
 	SUBS R1,R1,#1
 	BNE count_zero_loop
 	BX LR 	
-	
+//................................................................	
 	
 rightStringFull:
 	//MOV R0,#0
@@ -122,7 +123,7 @@ copy_right_string:
 end_rightStringFuLL:
 	POP {R4}
 	BX LR
-	
+//...............................................................	
 	
 	
 rightStringTrunc:
@@ -153,7 +154,7 @@ copy_right_string_turnc:
 end_turnc:
 	POP {R4}
 	BX LR
-	
+//.............................................................	
 
 sortAscendingInPlace:
     PUSH {R4,R5,R6}
@@ -181,7 +182,7 @@ ascending_check:
 ascending_sort_end:                    
     POP {R4,R5,R6}
     BX LR         
-	
+//.......................................................	
 	
 
 	
@@ -224,7 +225,7 @@ check_inner:
 end_match:
 	POP {R4,R5,R6,R7}
 	BX LR
-
+//............................................................
 
 
 
@@ -272,7 +273,7 @@ check_2inner:
 end_2match:
 	POP {R4,R5,R6,R7}
 	BX LR
-	
+//......................................................	
 	
 	
 	
@@ -313,10 +314,55 @@ decimal_u8_end:
 	CMP R0,#255
 	MOVGT R0,#0
 	BX LR
-	
 
-	
-	
+//...........................................................	
+
+
+decimalToInt8:
+	PUSH {R4,R5,R6,R7,R8,R9}
+	MOV R1,R0
+	MOV R2,#0
+	MOV R0,#0
+	MOV R4,#10
+	MOV R6,#1
+	MOV R7,#0
+find_length_S8:
+	LDRB R3,[R1,R2]
+	CMP R3,#0
+	ADDNE R2,R2,#1
+	BNE find_length_S8
+	SUB R2,R2,#1
+	MOV R5,R2
+	MOV R8,R2
+get_multiplicity_s:
+	CMP R2,#0
+	BLT decimal_s8_end
+	CMP R5,R2
+	MULNE R9,R6,R4
+	MOVNE R6,R9
+	SUBNE R5,R5,#1
+	BNE get_multiplicity_s
+	LDRB R3,[R1,R2]
+	CMP R3,#45
+	BEQ neg_value
+	SUB R3,R3,#48
+	MUL R7,R6,R3
+	ADD R0,R0,R7
+	SUB R2,R2,#1
+	MOV R5,R8
+	MOV R6,#1
+	B get_multiplicity_s
+neg_value:
+	NEG R0,R0
+decimal_s8_end:
+	POP {R4,R5,R6,R7,R8,R9}
+	CMP R0,#-128
+	MOVLT R0,#0
+	CMPGT R0,#127
+	MOVGT R0,#0
+	BX LR
+
+//...........................................................
 
 uint8ToBinaryString:
 	MOV R2,#0x80
@@ -330,75 +376,7 @@ utb_loop:
 	MOV R3,#0
 	STRB R3,[R0]
 	BX LR
-
-
-
-
-/*
-hexStringToUint16:
-	PUSH {R4,R5,R6,R7,R8}
-	MOV R1,R0
-	MOV R0,#0
-	MOV R2,#3
-	MOV R4,#3
-	MOV R8,#0
-find_size_hex:
-	LDRSB R3,[R1],#1 
-	CMP R3,#0
-	ADDNE R8,R8,#1
-	BNE find_size_hex
-	SUB R1,R1,R8
-	SUB R1,R1,#1
-	CMP R8,#4
-	BGT hex_end
-load_hex:
-	CMP R2,#0
-	BLT hex_end
-	LDRB R3,[R1,R2]
-	CMP R3,#0
-	SUB R2,R2,#1
-	BEQ load_hex
-	CMP R3,#48
-	MOVLT R0,#0
-	BLT hex_end
-	CMP R3,#57
-	MOVGT R0,#0
-	BGT hex_end
-one_hex:
-	 CMP R4,#4
-	 BNE two_hex
-	 SUB R4,R4,#1
-	 SUB R3,R3,#48
-	 ADDEQ R0,R0,R3
-	 
-	 B load_hex
-two_hex:
-	CMP R4,#3
-	BNE three_hex
-	SUB R4,R4,#1
-	SUB R3,R3,#48
-	MUL R3,R3,R6
-	ADD R0,R0,R3
-	B load_hex
-three_hex:
-	CMP R4,#2
-	BNE four_hex
-	SUB R3,R3,#48
-	SUB R4,R4,#1
-	MUL R3,R3,R7
-	ADD R0,R0,R3
-	B load_hex
-four_hex:
-	
-	
-check:
-	CMP R0,#255
-	MOVGT R0,#0
-hex_end:
-	POP {R4,R5,R6}
-	BX LR
-
-*/	
+//..........................................................
 
 hexStringToUint16:
 	PUSH {R4,R5,R6,R7,R8}
@@ -471,7 +449,7 @@ four_hex:
 hex_end:
 	POP {R4,R5,R6}
 	BX LR
-	
+//..................................................................	
 
 
 	
@@ -513,7 +491,7 @@ equal_string:
 find_street_end:
 	POP {R4,R5,R6,R7,R8,R9}
 	BX LR
-	
+//................................................................	
 	
 	
 	

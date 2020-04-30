@@ -107,9 +107,9 @@ int main()
   printf("The %s is offset %s\n",a,x);
   */
   
-  char *a={"1000"};
-  uint8_t x= decimalToUint8(a);
-  printf("The value is %u\n",x);
+  char *a={"128"};
+  int8_t x= decimalToInt8(a);
+  printf("The value is %d\n",x);
   
   
   /*
